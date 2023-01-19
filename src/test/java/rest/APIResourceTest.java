@@ -219,6 +219,71 @@ public class APIResourceTest {
         assertThat(speakerDTOList, containsInAnyOrder(s1DTO, s2DTO, s3DTO));
     }
 
+        @Test
+    void createSpeaker() {
+            Speaker newSpeaker = new Speaker( "Preben", "Cykelhandler", "m");
+
+            SpeakerDTO newSpeakerDTO = new SpeakerDTO(newSpeaker);
+        String requestBody = GSON.toJson(newSpeakerDTO);
+
+        given()
+                .header("Content-type", ContentType.JSON)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("info/speaker")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("id", notNullValue())
+                .body("name", equalTo("Preben"))
+                .body("profession", equalTo("Cykelhandler"));
+
+    }
+    @Test
+    void createTalk() {
+        Talk newTalk = new Talk("Climbing", 30, "suits");
+
+        TalkDTO newTalkDTO = new TalkDTO(newTalk);
+        String requestBody = GSON.toJson(newTalkDTO);
+
+        given()
+                .header("Content-type", ContentType.JSON)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("info/talk")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("id", notNullValue())
+                .body("topic", equalTo("Climbing"))
+                .body("duration", equalTo(30));
+    }
+    @Test
+    void createConference() {
+        Conference newConference = new Conference("Back to nature", "Østermarie", 30, "31-2-23", "02:00:00");
+
+        ConferenceDTO newConferenceDTO = new ConferenceDTO(newConference);
+        String requestBody = GSON.toJson(newConferenceDTO);
+
+        given()
+                .header("Content-type", ContentType.JSON)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("info/conference")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("id", notNullValue())
+                .body("name", equalTo("Back to nature"))
+                .body("location", equalTo("Østermarie"))
+                .body("capacity", equalTo(30));
+    }
+
+
+
 
 //
 //    @Test
@@ -273,29 +338,6 @@ public class APIResourceTest {
 ////        System.out.println(jsonString);
 //    }
 //
-//
-//    @Test
-//    void createBoat() {
-//        Boat newBoat = new Boat("Testbåd", "testmodel", "Dummy", "https://img.fruugo.com/product/8/58/278398588_max.jpg");
-////        newBoat.setHarbour(h1);
-//        h1.addBoat(newBoat);
-//        BoatDTO newBoatDTO = new BoatDTO(newBoat);
-//        String requestBody = GSON.toJson(newBoatDTO);
-//
-//        given()
-//                .header("Content-type", ContentType.JSON)
-//                .and()
-//                .body(requestBody)
-//                .when()
-//                .post("boat/boat")
-//                .then()
-//                .assertThat()
-//                .statusCode(200)
-//                .body("id", notNullValue())
-//                .body("brand", equalTo("Testbåd"))
-//                .body("model", equalTo("testmodel"));
-//
-//    }
 //
 
 //    @Test //fra Jons ca2

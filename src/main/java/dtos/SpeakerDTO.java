@@ -19,7 +19,7 @@ public class SpeakerDTO {
 
     public SpeakerDTO(Speaker speaker) {
         if (speaker.getId() != null) {
-            this.id = id;
+            this.id = speaker.getId();
         }
         this.name = speaker.getName();
         this.profession = speaker.getProfession();

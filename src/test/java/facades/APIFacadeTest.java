@@ -159,6 +159,42 @@ public class APIFacadeTest {
         assertThat(speakers, containsInAnyOrder(s1DTO, s2DTO, s3DTO));
 
     }
+
+    @Test
+    void createSpeaker() {
+        Speaker newSpeaker = new Speaker("Preben", "Cykelhandler", "m");
+
+        SpeakerDTO newSpeakerDTO = new SpeakerDTO(newSpeaker);
+        SpeakerDTO createdDTO = facade.createSpeaker(newSpeakerDTO);
+
+        assertEquals(4, facade.getAllSpeakers().size());
+        Set<SpeakerDTO> speakers = facade.getAllSpeakers();
+        assertThat(speakers, containsInAnyOrder(s1DTO, s2DTO, s3DTO, createdDTO));
+    }
+
+    @Test
+    void createTalk() {
+        Talk newTalk = new Talk("Climbing", 30, "suits");
+
+        TalkDTO newTalkDTO = new TalkDTO(newTalk);
+        TalkDTO createdDTO = facade.createTalk(newTalkDTO);
+
+        assertEquals(4, facade.getAllTalks().size());
+        Set<TalkDTO> talks = facade.getAllTalks();
+        assertThat(talks, containsInAnyOrder(t1DTO, t2DTO, t3DTO, createdDTO));
+    }
+
+    @Test
+    void createConference() {
+        Conference newConference = new Conference("Back to nature", "Østermarie", 30, "31-2-23", "02:00:00");
+        ConferenceDTO newConferenceDTO = new ConferenceDTO(newConference);
+        ConferenceDTO createdDTO = facade.createConference(newConferenceDTO);
+
+        assertEquals(4, facade.getAllConferences().size());
+        Set<ConferenceDTO> talks = facade.getAllConferences();
+        assertThat(talks, containsInAnyOrder(c1DTO, c2DTO, c3DTO, createdDTO));
+    }
+
 }
 
 //
@@ -193,14 +229,4 @@ public class APIFacadeTest {
 //
 //    }
 //
-//    @Test
-//    void createBoat() {
-//        Boat newBoat = new Boat("NyBåd", "speedbåd", "Myggen", "http://imageurl");
-//        newBoat.setHarbour(h1);
-//        BoatDTO newBoatDTO = new BoatDTO(newBoat);
-//        BoatDTO actual = facade.createBoat(newBoatDTO);
-//
-//        assertEquals(4, facade.getAllBoats().size());
-//
-//
-//    }
+

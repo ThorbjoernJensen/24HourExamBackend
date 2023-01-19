@@ -1,5 +1,8 @@
 package entities;
 
+import dtos.SpeakerDTO;
+import dtos.TalkDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,6 +44,14 @@ public class Talk {
         this.topic = topic;
         this.duration = duration;
         this.propsList = propsList;
+
+    }
+
+
+    public Talk(TalkDTO talkDTO) {
+        this.topic = talkDTO.getTopic();
+        this.duration = talkDTO.getDuration();
+        this.propsList = talkDTO.getPropsList();
 
     }
 

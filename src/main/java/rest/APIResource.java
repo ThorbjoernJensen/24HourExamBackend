@@ -4,15 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.ConferenceDTO;
 import dtos.SpeakerDTO;
+import dtos.TalkDTO;
 import facades.APIFacade;
 import facades.Populator;
 import utils.EMF_Creator;
 
 import javax.annotation.security.DeclareRoles;
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -69,6 +68,35 @@ public class APIResource {
         Set<SpeakerDTO> speakerDTOSet = FACADE.getAllSpeakers();
         return GSON.toJson(speakerDTOSet);
 
+    }
+
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("speaker")
+    public String createSpeaker(String speakerJSON) {
+        SpeakerDTO newSpeakerDTO = GSON.fromJson(speakerJSON, SpeakerDTO.class);
+        SpeakerDTO createdSpeakerDTO = FACADE.createSpeaker(newSpeakerDTO);
+        return GSON.toJson(createdSpeakerDTO);
+    }
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("talk")
+    public String createTalk(String talkJSON) {
+        TalkDTO newTalkDTO = GSON.fromJson(talkJSON, TalkDTO.class);
+        TalkDTO createdTalkDTO = FACADE.createTalk(newTalkDTO);
+        return GSON.toJson(createdTalkDTO);
+    }
+
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("conference")
+    public String createConference(String conferenceJSON) {
+        ConferenceDTO newConferenceDTO = GSON.fromJson(conferenceJSON, ConferenceDTO.class);
+        ConferenceDTO createdConferenceDTO = FACADE.createConference(newConferenceDTO);
+        return GSON.toJson(createdConferenceDTO);
     }
 //
 //    @GET

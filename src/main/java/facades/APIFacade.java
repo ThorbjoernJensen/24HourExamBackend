@@ -2,13 +2,16 @@ package facades;
 
 import dtos.ConferenceDTO;
 import dtos.SpeakerDTO;
+import dtos.TalkDTO;
 import entities.Conference;
 import entities.Speaker;
+import entities.Talk;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.WebApplicationException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,6 +75,95 @@ public class APIFacade {
             em.close();
         }
     }
+
+    public Set<TalkDTO> getAllTalks() {
+        EntityManager em = getEntityManager();
+        Set<TalkDTO> talkDTOSet = new HashSet<>();
+        try {
+            TypedQuery<Talk> query = em.createQuery("SELECT t FROM Talk t", Talk.class);
+            List<Talk> talks = query.getResultList();
+            if (talks.size() == 0) {
+                throw new WebApplicationException("No talks found", 404);
+            }
+            return TalkDTO.makeDTOSet(talks);
+        } finally {
+            em.close();
+        }
+    }
+
+    public SpeakerDTO createSpeaker(SpeakerDTO newSpeakerDTO) {
+
+//        System.out.println("fra facade create boat: " + newBoatDTO.getOwners());
+        Speaker newSpeaker = new Speaker(newSpeakerDTO);
+
+        EntityManager em = emf.createEntityManager();
+        if ((newSpeaker.getName().length() == 0) || (newSpeaker.getProfession().length() == 0)) {
+            throw new WebApplicationException("Name and/or profession is missing", 400);
+        }
+
+
+//        TODO check for duplicates
+
+        try {
+            em.getTransaction().begin();
+//            harbour = em.find(Harbour.class, newBoat.getHarbour().getId());
+//            harbour.addBoat(newBoat);
+
+            em.persist(newSpeaker);
+            em.getTransaction().commit();
+            return new SpeakerDTO(newSpeaker);
+        } finally {
+            em.close();
+        }
+
+
+    }
+
+    public TalkDTO createTalk(TalkDTO newTalkDTO) {
+        Talk newTalk = new Talk(newTalkDTO);
+        EntityManager em = emf.createEntityManager();
+        if (newTalk.getTopic().length() == 0) {
+            throw new WebApplicationException("Topic is missing", 400);
+        }
+
+//        TODO check for duplicates
+
+        try {
+            em.getTransaction().begin();
+//            harbour = em.find(Harbour.class, newBoat.getHarbour().getId());
+//            harbour.addBoat(newBoat);
+
+            em.persist(newTalk);
+            em.getTransaction().commit();
+            return new TalkDTO(newTalk);
+        } finally {
+            em.close();
+        }
+    }
+
+    public ConferenceDTO createConference(ConferenceDTO newConferenceDTO) {
+        Conference newConference = new Conference(newConferenceDTO);
+        EntityManager em = emf.createEntityManager();
+        if (newConference.getName().length() == 0) {
+            throw new WebApplicationException("Name is missing", 400);
+        }
+
+//        TODO check for duplicates
+
+        try {
+            em.getTransaction().begin();
+//            harbour = em.find(Harbour.class, newBoat.getHarbour().getId());
+//            harbour.addBoat(newBoat);
+
+            em.persist(newConference);
+            em.getTransaction().commit();
+            return new ConferenceDTO(newConference);
+        } finally {
+            em.close();
+        }
+    }
+
+
 
     //    public Set<OwnerDTO> getAllOwners() {
 //        EntityManager em = emf.createEntityManager();

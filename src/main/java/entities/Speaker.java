@@ -1,5 +1,7 @@
 package entities;
 
+import dtos.SpeakerDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,6 +38,11 @@ public class Speaker {
         this.name = name;
         this.profession = profession;
         this.gender = gender;
+    }
+    public Speaker(SpeakerDTO speakerDTO) {
+        this.name = speakerDTO.getName();
+        this.profession = speakerDTO.getProfession();
+        this.gender = speakerDTO.getGender();
     }
 
     public Integer getId() {

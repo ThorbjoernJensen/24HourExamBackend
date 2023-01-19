@@ -4,6 +4,8 @@ import entities.Speaker;
 import entities.Talk;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class TalkDTO {
@@ -38,6 +40,11 @@ public class TalkDTO {
     }
 
     public static Set<TalkDTO> makeDTOSet(Set<Talk> talks){
+        Set<TalkDTO> talkDTOSet= new HashSet<>();
+        talks.forEach(talk -> talkDTOSet.add(new TalkDTO(talk)));
+        return talkDTOSet;
+    }
+    public static Set<TalkDTO> makeDTOSet(List<Talk> talks){
         Set<TalkDTO> talkDTOSet= new HashSet<>();
         talks.forEach(talk -> talkDTOSet.add(new TalkDTO(talk)));
         return talkDTOSet;
@@ -86,5 +93,18 @@ public class TalkDTO {
             speakers.forEach(speaker -> speakerDTOSet.add(new SpeakerDTO(speaker)));
             return speakerDTOSet;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TalkDTO talkDTO = (TalkDTO) o;
+        return Objects.equals(id, talkDTO.id) && Objects.equals(topic, talkDTO.topic) && Objects.equals(duration, talkDTO.duration) && Objects.equals(propsList, talkDTO.propsList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, topic, duration, propsList);
     }
 }

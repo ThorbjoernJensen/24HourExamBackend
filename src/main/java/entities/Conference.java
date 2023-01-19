@@ -1,5 +1,7 @@
 package entities;
 
+import dtos.ConferenceDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,6 +37,13 @@ public class Conference {
         this.capacity = capacity;
         this.date = date;
         this.time = time;
+    }
+    public Conference(ConferenceDTO conferenceDTO) {
+        this.name = conferenceDTO.getName();
+        this.location = conferenceDTO.getLocation();
+        this.capacity = conferenceDTO.getCapacity();
+        this.date = conferenceDTO.getDate();
+        this.time = conferenceDTO.getTime();
     }
 
 
