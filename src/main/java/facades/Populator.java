@@ -5,8 +5,7 @@
  */
 package facades;
 
-import entities.Role;
-import entities.User;
+import entities.*;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
@@ -41,39 +40,43 @@ public class Populator {
         em.persist(user);
         em.persist(admin);
         em.persist(both);
+
+//        Add Conferences
+        Conference c1 = new Conference("conference 1", "Bornholm", 10,"20-1-23","00:08:00");
+        Conference c2 = new Conference("conference 2", "Lyngby", 10,"20-1-23","00:09:00");
+        Conference c3 = new Conference("conference 3", "Rom", 10,"20-1-23","00:11:00");
 //
-////        Add owners
-//        Owner o1 = new Owner("Skipper Bænt", "Persillehaven 40", "38383838");
-//        Owner o2 = new Owner("Skipper Niels", "Persillehaven 42", "39393939");
-//        Owner o3 = new Owner("Skipper Bente", "Persillehaven 38", "40404040");
+        Speaker s1 = new Speaker("Boris","retired","m");
+        Speaker s2 = new Speaker("Donald","investor","m");
+        Speaker s3 = new Speaker("Beckham","manager","m");
 //
-//        Harbour h1 = new Harbour("Melsted Havn", "Melsted byvej", 8);
-//        Harbour h2 = new Harbour("Nexø Havn", "Hovedvejen", 14);
-//        Harbour h3 = new Harbour("Aakirkeby Havn", "Melsted byvej", 32);
-//
-//        Boat b1 = new Boat("Boatmaster", "speeder", "Martha", "https://img.fruugo.com/product/8/58/278398588_max.jpg");
-//        Boat b2 = new Boat("Das Boot", "submarine", "Aase", "https://cdn.shopify.com/s/files/1/0626/0562/3537/products/31S6ddXfLmL.jpg?v=1659358008");
-//        Boat b3 = new Boat("Hanger", "supersize", "King Lincoln", "https://upload.wikimedia.org/wikipedia/commons/2/2d/USS_Nimitz_%28CVN-68%29.jpg");
-//
-//        b1.addOwner(o1);
-//        b2.addOwner(o1);
-//        b2.addOwner(o2);
-//        b3.addOwner(o1);
-//        b3.addOwner(o3);
-//
-//        h1.addBoat(b1);
-//        h3.addBoat(b2);
-//        h3.addBoat(b3);
-//
-//        em.persist(o1);
-//        em.persist(o2);
-//        em.persist(o3);
-//        em.persist(b1);
-//        em.persist(b2);
-//        em.persist(b3);
-//        em.persist(h1);
-//        em.persist(h2);
-//        em.persist(h3);
+        Talk t1 = new Talk("climate change on Bornholm", 120, "projector, whiteboard, sunscrean");
+        Talk t2 = new Talk("Ideas for a new future", 90, "Gadgetset, waterbottles");
+        Talk t3 = new Talk("Generic Ted-Talk", 20, "whiteboard");
+
+        //       add talks to conferences;
+        c1.addTalk(t1);
+        c3.addTalk(t2);
+        c3.addTalk(t3);
+
+
+
+        s2.addTalk(t1);
+        s2.addTalk(t2);
+        s3.addTalk(t1);
+        s3.addTalk(t3);
+
+        em.persist(c1);
+        em.persist(c2);
+        em.persist(c3);
+
+        em.persist(s1);
+        em.persist(s2);
+        em.persist(s3);
+
+        em.persist(t1);
+        em.persist(t2);
+        em.persist(t3);
 //
         em.getTransaction().commit();
         System.out.println("PW: " + user.getUserPass());
