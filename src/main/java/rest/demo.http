@@ -1,0 +1,83 @@
+POST http://localhost:8080/CA2_backend_G_war_exploded/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "JK123456"
+}
+###
+GET http://localhost:8080/quickstart_war_exploded/api/info/admin
+X-Access-Token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiYWRtaW4iLCJleHAiOjE2NjcyOTk5NzEsImlhdCI6MTY2NzI5ODE3MSwiaXNzdWVyIjoic2VtZXN0ZXJzdGFydGNvZGUtZGF0MyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.TOIzMcm5xiGfORrc8Egv_v3--4a4jtdY355OQ6v2nfA
+
+### query is a string caontaining either the id of a pokémon or it's name
+POST http://localhost:8080/quickstart_war_exploded/api/info/pokemon
+Content-Type: application/json
+
+{
+  "query": "133"
+}
+
+### deckSize is clamped in frontend to be be a whole number from 1 to 10 inclusive
+POST http://localhost:8080/quickstart_war_exploded/api/info/pokemondeck
+Content-Type: application/json
+
+{
+"deckSize": "3"
+}
+###
+POST http://localhost:8080/quickstart_war_exploded/api/info/cityinfo
+Content-Type: application/json
+
+{
+"query": "London"
+}
+
+
+
+### testing addbookmark on localhost
+POST http://localhost:8080/quickstart_war_exploded/api/info/addbookmark
+Content-Type: application/json
+
+{
+  "username": "user",
+  "cityid": "2"
+}
+
+### testing getbookmarked on localhost
+POST http://localhost:8080/quickstart_war_exploded/api/info/getbookmarked
+Content-Type: application/json
+
+{
+  "username": "user"
+}
+
+### testing welcome message on deployed
+GET https://dengamlegymnastiksal.dk/tomcat/quickstart/api/info/
+Content-Type: application/json
+
+### testing cityinfo on deployed
+POST https://dengamlegymnastiksal.dk/tomcat/quickstart/api/info/cityinfo
+Content-Type: application/json
+
+{
+  "query": "Madrid"
+}
+
+
+### testing addbookmark on deployed
+POST https://dengamlegymnastiksal.dk/tomcat/quickstart/api/info/addbookmark
+Content-Type: application/json
+
+{
+  "username": "user",
+  "cityid": "4"
+}
+
+
+### testing getbookmarked on deployed
+POST https://dengamlegymnastiksal.dk/tomcat/quickstart/api/info/getbookmarked
+Content-Type: application/json
+
+{
+  "username": "user"
+}
