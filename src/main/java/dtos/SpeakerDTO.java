@@ -5,6 +5,8 @@ import entities.Talk;
 
 import javax.persistence.ManyToMany;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class SpeakerDTO {
@@ -50,6 +52,11 @@ public class SpeakerDTO {
         speakers.forEach(speaker -> speakerDTOSet.add(new SpeakerDTO(speaker)));
         return speakerDTOSet;
     }
+    public static Set<SpeakerDTO> makeDTOSet(List<Speaker> speakers){
+        Set<SpeakerDTO> speakerDTOSet= new HashSet<>();
+        speakers.forEach(speaker -> speakerDTOSet.add(new SpeakerDTO(speaker)));
+        return speakerDTOSet;
+    }
 
     public static class TalkDTO {
         private Integer id;
@@ -87,5 +94,18 @@ public class SpeakerDTO {
             talks.forEach(talk -> talkDTOSet.add(new TalkDTO(talk)));
             return talkDTOSet;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpeakerDTO that = (SpeakerDTO) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(profession, that.profession) && Objects.equals(gender, that.gender);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, profession, gender);
     }
 }

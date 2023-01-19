@@ -190,8 +190,8 @@ public class APIResourceTest {
 
     @Test
     void getAllConferences() {
-        List<ConferenceDTO> ownerDTOList;
-        ownerDTOList =
+        List<ConferenceDTO> conferenceDTOList;
+        conferenceDTOList =
                 given()
                         .contentType("application/json")
                         .when()
@@ -200,10 +200,24 @@ public class APIResourceTest {
                         .assertThat()
                         .extract().body().jsonPath().getList("", ConferenceDTO.class);
 
-        ownerDTOList.forEach(ownerDTO -> System.out.println(ownerDTO.getId() + ": " + ownerDTO.getName()));
-        assertThat(ownerDTOList, containsInAnyOrder(c1DTO, c2DTO, c3DTO));
+//        conferenceDTOList.forEach(ownerDTO -> System.out.println(ownerDTO.getId() + ": " + ownerDTO.getName()));
+        assertThat(conferenceDTOList, containsInAnyOrder(c1DTO, c2DTO, c3DTO));
     }
 
+    @Test
+    void getAllSpeakers() {
+        List<SpeakerDTO> speakerDTOList;
+        speakerDTOList =
+                given()
+                        .contentType("application/json")
+                        .when()
+                        .get("/info/speaker")
+                        .then().statusCode(200)
+                        .assertThat()
+                        .extract().body().jsonPath().getList("", SpeakerDTO.class);
+
+        assertThat(speakerDTOList, containsInAnyOrder(s1DTO, s2DTO, s3DTO));
+    }
 
 
 //

@@ -1,7 +1,9 @@
 package facades;
 
 import dtos.ConferenceDTO;
+import dtos.SpeakerDTO;
 import entities.Conference;
+import entities.Speaker;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -51,6 +53,21 @@ public class APIFacade {
         try {
             long conferenceCount = (long) em.createQuery("SELECT COUNT(c) FROM Conference c").getSingleResult();
             return conferenceCount;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Set<SpeakerDTO> getAllSpeakers() {
+        EntityManager em = getEntityManager();
+        Set<SpeakerDTO> speakerDTOSet = new HashSet<>();
+        try {
+            TypedQuery<Speaker> query = em.createQuery("SELECT s FROM Speaker s", Speaker.class);
+            List<Speaker> speakers = query.getResultList();
+            if (speakers.size() == 0) {
+                throw new WebApplicationException("No speakers found", 404);
+            }
+            return SpeakerDTO.makeDTOSet(speakers);
         } finally {
             em.close();
         }

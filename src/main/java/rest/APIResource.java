@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.ConferenceDTO;
+import dtos.SpeakerDTO;
 import facades.APIFacade;
 import facades.Populator;
 import utils.EMF_Creator;
@@ -57,6 +58,16 @@ public class APIResource {
     public String getAllConferences() {
         Set<ConferenceDTO> conferenceDTOSet = FACADE.getAllConferences();
         return GSON.toJson(conferenceDTOSet);
+
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("speaker")
+//    @RolesAllowed({"user"})
+    public String getAllSpeakers() {
+        Set<SpeakerDTO> speakerDTOSet = FACADE.getAllSpeakers();
+        return GSON.toJson(speakerDTOSet);
 
     }
 //

@@ -149,6 +149,16 @@ public class APIFacadeTest {
         assertThat(owners, containsInAnyOrder(c1DTO, c2DTO, c3DTO));
 
     }
+
+    @Test
+    void getAllSpeakers() {
+        Set<SpeakerDTO> speakers = facade.getAllSpeakers();
+        int expexted = 3;
+        int actual = speakers.size();
+        assertEquals(actual, expexted);
+        assertThat(speakers, containsInAnyOrder(s1DTO, s2DTO, s3DTO));
+
+    }
 }
 
 //
