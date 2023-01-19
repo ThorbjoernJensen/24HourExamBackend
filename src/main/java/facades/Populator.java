@@ -23,7 +23,6 @@ public class Populator {
     public static void populate() {
 
         EntityManager em = emf.createEntityManager();
-        //Create test users
         User user = new User("user", "As123456");
         User admin = new User("admin", "JK123456");
         User both = new User("user_admin", "DQ123456");
@@ -41,26 +40,22 @@ public class Populator {
         em.persist(admin);
         em.persist(both);
 
-//        Add Conferences
-        Conference c1 = new Conference("conference 1", "Bornholm", 10,"20-1-23","00:08:00");
-        Conference c2 = new Conference("conference 2", "Lyngby", 10,"20-1-23","00:09:00");
-        Conference c3 = new Conference("conference 3", "Rom", 10,"20-1-23","00:11:00");
-//
-        Speaker s1 = new Speaker("Boris","retired","m");
-        Speaker s2 = new Speaker("Donald","investor","m");
-        Speaker s3 = new Speaker("Beckham","manager","m");
-//
+        Conference c1 = new Conference("conference 1", "Bornholm", 10, "20-1-23", "00:08:00");
+        Conference c2 = new Conference("conference 2", "Lyngby", 10, "20-1-23", "00:09:00");
+        Conference c3 = new Conference("conference 3", "Rom", 10, "20-1-23", "00:11:00");
+        Speaker s1 = new Speaker("Boris", "retired", "m");
+        Speaker s2 = new Speaker("Donald", "investor", "m");
+        Speaker s3 = new Speaker("Beckham", "manager", "m");
         Talk t1 = new Talk("climate change on Bornholm", 120, "projector, whiteboard, sunscrean");
         Talk t2 = new Talk("Ideas for a new future", 90, "Gadgetset, waterbottles");
         Talk t3 = new Talk("Generic Ted-Talk", 20, "whiteboard");
 
-        //       add talks to conferences;
+        //       add talks to conferences
         c1.addTalk(t1);
         c3.addTalk(t2);
         c3.addTalk(t3);
 
-
-
+// add talks to speakers
         s2.addTalk(t1);
         s2.addTalk(t2);
         s3.addTalk(t1);
@@ -69,24 +64,13 @@ public class Populator {
         em.persist(c1);
         em.persist(c2);
         em.persist(c3);
-
         em.persist(s1);
         em.persist(s2);
         em.persist(s3);
-
         em.persist(t1);
         em.persist(t2);
         em.persist(t3);
-//
         em.getTransaction().commit();
-        System.out.println("PW: " + user.getUserPass());
-        System.out.println("Testing user with OK password: " + user.verifyPassword("As123456"));
-        System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
-        System.out.println("Created TEST Users");
-
-////        Create dummy -owners
-////        FACADE.create(new Owner("Preben"));
-////        FACADE.create(new Owner("Poul"));
         em.close();
     }
 

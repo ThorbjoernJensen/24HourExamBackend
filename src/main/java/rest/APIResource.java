@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.ConferenceDTO;
 import facades.APIFacade;
 import facades.Populator;
 import utils.EMF_Creator;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
+import java.util.Set;
 
 @Path("info")
 @DeclareRoles({"user", "admin"})
@@ -48,15 +50,15 @@ public class APIResource {
     }
 
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("owner")
-////    @RolesAllowed({"user"})
-//    public String getAllOwners() {
-//        Set<OwnerDTO> ownerDTOSet = FACADE.getAllOwners();
-//        return GSON.toJson(ownerDTOSet);
-//
-//    }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("conference")
+//    @RolesAllowed({"user"})
+    public String getAllConferences() {
+        Set<ConferenceDTO> conferenceDTOSet = FACADE.getAllConferences();
+        return GSON.toJson(conferenceDTOSet);
+
+    }
 //
 //    @GET
 //    @Produces(MediaType.APPLICATION_JSON)

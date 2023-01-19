@@ -1,7 +1,15 @@
 package facades;
 
+import dtos.ConferenceDTO;
+import entities.Conference;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.ws.rs.WebApplicationException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class APIFacade {
     private static APIFacade instance;
@@ -23,27 +31,55 @@ public class APIFacade {
         return emf.createEntityManager();
     }
 
+    public Set<ConferenceDTO> getAllConferences() {
+        EntityManager em = getEntityManager();
+        Set<ConferenceDTO> conferenceDTOSet = new HashSet<>();
+        try {
+            TypedQuery<Conference> query = em.createQuery("SELECT c FROM Conference c", Conference.class);
+            List<Conference> conferences = query.getResultList();
+            if (conferences.size() == 0) {
+                throw new WebApplicationException("No conferences found", 404);
+            }
+            return ConferenceDTO.makeDTOSet(conferences);
+        } finally {
+            em.close();
+        }
+    }
+
+    public long getConfereceCount() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            long conferenceCount = (long) em.createQuery("SELECT COUNT(c) FROM Conference c").getSingleResult();
+            return conferenceCount;
+        } finally {
+            em.close();
+        }
+    }
+
+    //    public Set<OwnerDTO> getAllOwners() {
+//        EntityManager em = emf.createEntityManager();
+//        try {
+//            TypedQuery<Owner> query = em.createQuery("SELECT o FROM Owner o", Owner.class);
+//            List<Owner> owners = query.getResultList();
+//            Set<OwnerDTO> ownerDTOList = OwnerDTO.makeDTOSet(owners);
+////        return RenameMeDTO.getDtos(rms);
+//            return ownerDTOList;
+//        } finally {
+//            em.close();
+//        }
+//    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//    @Override
+//    public PersonsDTO getAllPersons() {
+//        EntityManager em = getEntityManager();
+//        try{
+//            return new PersonsDTO(em.createNamedQuery("Person.getAllRows").getResultList());
+//        }finally{
+//            em.close();
+//        }
+//    }
+//
 
 
 //    public OwnerDTO getOwnerById(long id) { //throws RenameMeNotFoundException {
@@ -59,28 +95,9 @@ public class APIFacade {
 //        }
 //    }
 //
-//    public long getOwnerCount() {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            long ownerCount = (long) em.createQuery("SELECT COUNT(o) FROM Owner o").getSingleResult();
-//            return ownerCount;
-//        } finally {
-//            em.close();
-//        }
-//    }
+
 //
-//    public Set<OwnerDTO> getAllOwners() {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            TypedQuery<Owner> query = em.createQuery("SELECT o FROM Owner o", Owner.class);
-//            List<Owner> owners = query.getResultList();
-//            Set<OwnerDTO> ownerDTOList = OwnerDTO.makeDTOSet(owners);
-////        return RenameMeDTO.getDtos(rms);
-//            return ownerDTOList;
-//        } finally {
-//            em.close();
-//        }
-//    }
+
 //
 //    public Set<HarbourDTO> getAllHarbours() {
 //        EntityManager em = emf.createEntityManager();

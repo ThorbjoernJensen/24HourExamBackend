@@ -2,22 +2,35 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.ConferenceDTO;
+import dtos.SpeakerDTO;
+import dtos.TalkDTO;
+import entities.*;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
+
 
 public class APIResourceTest {
     private static final int SERVER_PORT = 7777;
@@ -29,12 +42,12 @@ public class APIResourceTest {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
 
-//    private static Owner o1, o2, o3;
-//    private static OwnerDTO o1DTO, o2DTO, o3DTO;
-//    private static Harbour h1, h2, h3;
-//    private static HarbourDTO h1DTO, h2DTO, h3DTO;
-//    private static Boat b1, b2, b3;
-//    private static BoatDTO b1DTO, b2DTO, b3DTO;
+    private static Conference c1, c2, c3;
+    private static ConferenceDTO c1DTO, c2DTO, c3DTO;
+    private static Talk t1, t2, t3;
+    private static TalkDTO t1DTO, t2DTO, t3DTO;
+    private static Speaker s1, s2, s3;
+    private static SpeakerDTO s1DTO, s2DTO, s3DTO;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -62,84 +75,79 @@ public class APIResourceTest {
         httpServer.shutdownNow();
     }
 
-//    @BeforeEach
-//    public void setUp() {
-//        EntityManager em = emf.createEntityManager();
-//
-//        o1 = new Owner("Skipper Bænt", "Persillehaven 40", "38383838");
-//        o2 = new Owner("Skipper Niels", "Persillehaven 42", "39393939");
-//        o3 = new Owner("Skipper Bente", "Persillehaven 38", "40404040");
-//
-//        h1 = new Harbour("Melsted Havn", "Melsted byvej", 8);
-//        h2 = new Harbour("Nexø Havn", "Hovedvejen", 14);
-//        h3 = new Harbour("Aakirkeby Havn", "Melsted byvej", 32);
-//
-//        b1 = new Boat("Boatmaster", "speeder", "Martha", "https://img.fruugo.com/product/8/58/278398588_max.jpg");
-//        b2 = new Boat("Das Boot", "submarine", "Aase", "https://cdn.shopify.com/s/files/1/0626/0562/3537/products/31S6ddXfLmL.jpg?v=1659358008");
-//        b3 = new Boat("Hanger", "supersize", "King Lincoln", "https://upload.wikimedia.org/wikipedia/commons/2/2d/USS_Nimitz_%28CVN-68%29.jpg");
-//
-//
-//        b1.addOwner(o1);
-//        b2.addOwner(o1);
-//        b2.addOwner(o2);
-//        b3.addOwner(o3);
-//        b3.addOwner(o3);
-//
-//        h1.addBoat(b1);
-//        h3.addBoat(b2);
-//        h3.addBoat(b3);
-//
-//        Role userRole = new Role("user");
-//        Role adminRole = new Role("admin");
-//        User user = new User("user", "test1");
-//        user.addRole(userRole);
-//        User admin = new User("admin", "test2");
-//        admin.addRole(adminRole);
-//        User both = new User("user_admin", "test3");
-//
-//        try {
-//            em.getTransaction().begin();
-//
-//            em.createQuery("delete from Boat").executeUpdate();
-//            em.createQuery("delete from Harbour").executeUpdate();
-//            em.createQuery("delete from Owner").executeUpdate();
-//            em.createQuery("delete from User").executeUpdate();
-//            em.createQuery("delete from Role").executeUpdate();
-//
-//            both.addRole(userRole);
-//            both.addRole(adminRole);
-//            em.persist(userRole);
-//            em.persist(adminRole);
-//            em.persist(user);
-//            em.persist(admin);
-//            em.persist(both);
-//
-//            em.persist(o1);
-//            em.persist(o2);
-//            em.persist(o3);
-//            em.persist(b1);
-//            em.persist(b2);
-//            em.persist(b3);
-//            em.persist(h1);
-//            em.persist(h2);
-//            em.persist(h3);
-//            em.getTransaction().commit();
-//
-//
-//            o1DTO = new OwnerDTO(o1);
-//            o2DTO = new OwnerDTO(o2);
-//            o3DTO = new OwnerDTO(o3);
-//            h1DTO = new HarbourDTO(h1);
-//            h2DTO = new HarbourDTO(h2);
-//            h3DTO = new HarbourDTO(h3);
-//            b1DTO = new BoatDTO(b1);
-//            b2DTO = new BoatDTO(b2);
-//            b3DTO = new BoatDTO(b3);
-//        } finally {
-//            em.close();
-//        }
-//
-//    }
+    @BeforeEach
+    public void setUp() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.createQuery("delete from Speaker ").executeUpdate();
+            em.createQuery("delete from Talk").executeUpdate();
+            em.createQuery("delete from Conference ").executeUpdate();
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate();
+
+            User user = new User("user", "As123456");
+            User admin = new User("admin", "JK123456");
+            User both = new User("user_admin", "DQ123456");
+
+            Role userRole = new Role("user");
+            Role adminRole = new Role("admin");
+            user.addRole(userRole);
+            admin.addRole(adminRole);
+            both.addRole(userRole);
+            both.addRole(adminRole);
+            em.persist(userRole);
+            em.persist(adminRole);
+            em.persist(user);
+            em.persist(admin);
+            em.persist(both);
+
+            c1 = new Conference("conference 1", "Bornholm", 10, "20-1-23", "00:08:00");
+            c2 = new Conference("conference 2", "Lyngby", 10, "20-1-23", "00:09:00");
+            c3 = new Conference("conference 3", "Rom", 10, "20-1-23", "00:11:00");
+            s1 = new Speaker("Boris", "retired", "m");
+            s2 = new Speaker("Donald", "investor", "m");
+            s3 = new Speaker("Beckham", "manager", "m");
+            t1 = new Talk("climate change on Bornholm", 120, "projector, whiteboard, sunscrean");
+            t2 = new Talk("Ideas for a new future", 90, "Gadgetset, waterbottles");
+            t3 = new Talk("Generic Ted-Talk", 20, "whiteboard");
+
+//                   add talks to conferences
+            c1.addTalk(t1);
+            c3.addTalk(t2);
+            c3.addTalk(t3);
+
+// add talks to speakers
+            s2.addTalk(t1);
+            s2.addTalk(t2);
+            s3.addTalk(t1);
+            s3.addTalk(t3);
+
+            em.persist(c1);
+            em.persist(c2);
+            em.persist(c3);
+            em.persist(s1);
+            em.persist(s2);
+            em.persist(s3);
+            em.persist(t1);
+            em.persist(t2);
+            em.persist(t3);
+            em.getTransaction().commit();
+
+
+            c1DTO = new ConferenceDTO(c1);
+            c2DTO = new ConferenceDTO(c2);
+            c3DTO = new ConferenceDTO(c3);
+            s1DTO = new SpeakerDTO(s1);
+            s2DTO = new SpeakerDTO(s2);
+            s3DTO = new SpeakerDTO(s3);
+            t1DTO = new TalkDTO(t1);
+            t2DTO = new TalkDTO(t2);
+            t3DTO = new TalkDTO(t3);
+        } finally {
+            em.close();
+        }
+    }
 
     private static void login(String username, String password) {
         String json = String.format("{username: \"%s\", password: \"%s\"}", username, password);
@@ -180,50 +188,24 @@ public class APIResourceTest {
                 .body("msg", equalTo("Hello world"));
     }
 
-//    @Test
-//    void getAllOwners() {
-//        List<OwnerDTO> ownerDTOList;
-//        ownerDTOList =
-//                given()
-//                        .contentType("application/json")
-//                        .when()
-//                        .get("/boat/owner")
-//                        .then().statusCode(200)
-//                        .assertThat()
-//                        .extract().body().jsonPath().getList("", OwnerDTO.class);
-//        System.out.println("fetched data:");
-//        ownerDTOList.forEach(ownerDTO -> System.out.println(ownerDTO.getId() + ": " + ownerDTO.getName()));
-//
-//        System.out.println("lokal data");
-//        System.out.println(o1DTO.getId() + ": " + o1DTO.getName());
-//        System.out.println(o2DTO.getId() + ": " + o2DTO.getName());
-//        System.out.println(o3DTO.getId() + ": " + o3DTO.getName());
-//        assertThat(ownerDTOList, containsInAnyOrder(o1DTO, o2DTO, o3DTO));
-//
-//    }
-//
-//
-//    @Test
-//    void getAllOwners2() {
-//        List<OwnerDTO> ownerDTOList;
-////       Set<HarbourDTOS> harbourDTOSet;
-////       String jsonString =
-//
-//        ownerDTOList =
-//                given()
-//                        .contentType("application/json")
-//                        .when()
-//                        .get("/boat/owner")
-//                        .then()
-//                        .assertThat()
-//                        .statusCode(HttpStatus.OK_200.getStatusCode())
-//                        .extract().body().jsonPath().getList("", OwnerDTO.class);
-//
-////                        .extract().body().asString();
-////        System.out.println(jsonString);
-//
-//        assertThat(ownerDTOList, containsInAnyOrder(o1DTO, o2DTO, o3DTO));
-//    }
+    @Test
+    void getAllConferences() {
+        List<ConferenceDTO> ownerDTOList;
+        ownerDTOList =
+                given()
+                        .contentType("application/json")
+                        .when()
+                        .get("/info/conference")
+                        .then().statusCode(200)
+                        .assertThat()
+                        .extract().body().jsonPath().getList("", ConferenceDTO.class);
+
+        ownerDTOList.forEach(ownerDTO -> System.out.println(ownerDTO.getId() + ": " + ownerDTO.getName()));
+        assertThat(ownerDTOList, containsInAnyOrder(c1DTO, c2DTO, c3DTO));
+    }
+
+
+
 //
 //    @Test
 //    void getAllHarbours() {
