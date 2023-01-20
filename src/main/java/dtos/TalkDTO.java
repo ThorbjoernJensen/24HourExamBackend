@@ -1,5 +1,6 @@
 package dtos;
 
+import entities.Conference;
 import entities.Speaker;
 import entities.Talk;
 
@@ -13,6 +14,7 @@ public class TalkDTO {
     private String topic;
     private Integer duration;
     private String propsList;
+    private ConferenceDTO conference;
 
     public TalkDTO(Talk talk) {
         if (talk.getId() != null) {
@@ -21,6 +23,9 @@ public class TalkDTO {
         this.topic = talk.getTopic();
         this.duration = talk.getDuration();
         this.propsList = talk.getPropsList();
+        if (talk.getConference() != null) {
+            this.conference = new ConferenceDTO(talk.getConference());
+        }
     }
 
     public Integer getId() {
@@ -39,13 +44,18 @@ public class TalkDTO {
         return propsList;
     }
 
-    public static Set<TalkDTO> makeDTOSet(Set<Talk> talks){
-        Set<TalkDTO> talkDTOSet= new HashSet<>();
+    public ConferenceDTO getConference() {
+        return conference;
+    }
+
+    public static Set<TalkDTO> makeDTOSet(Set<Talk> talks) {
+        Set<TalkDTO> talkDTOSet = new HashSet<>();
         talks.forEach(talk -> talkDTOSet.add(new TalkDTO(talk)));
         return talkDTOSet;
     }
-    public static Set<TalkDTO> makeDTOSet(List<Talk> talks){
-        Set<TalkDTO> talkDTOSet= new HashSet<>();
+
+    public static Set<TalkDTO> makeDTOSet(List<Talk> talks) {
+        Set<TalkDTO> talkDTOSet = new HashSet<>();
         talks.forEach(talk -> talkDTOSet.add(new TalkDTO(talk)));
         return talkDTOSet;
     }
@@ -92,6 +102,62 @@ public class TalkDTO {
             Set<SpeakerDTO> speakerDTOSet = new HashSet<>();
             speakers.forEach(speaker -> speakerDTOSet.add(new SpeakerDTO(speaker)));
             return speakerDTOSet;
+        }
+    }
+
+    public static class ConferenceDTO {
+
+        private Integer id;
+        private String name;
+        private String location;
+        private Integer capacity;
+        private String date;
+        private String time;
+//        private Set<TalkDTO> talks;
+
+
+        public ConferenceDTO(Conference conference) {
+            if (conference.getId() != null) {
+                this.id = conference.getId();
+            }
+            this.name = conference.getName();
+            this.location = conference.getLocation();
+            this.capacity = conference.getCapacity();
+            this.date = conference.getDate();
+            this.time = conference.getTime();
+//            if (conference.getTalks() != null) {
+//                this.talks = TalkDTO.makeDTOSet(conference.getTalks());
+//            }
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public Integer getCapacity() {
+            return capacity;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public static Set<ConferenceDTO> makeDTOSet(List<Conference> conferences) {
+            Set<ConferenceDTO> conferenceDTOSet = new HashSet<>();
+            conferences.forEach(conference -> conferenceDTOSet.add(new ConferenceDTO(conference)));
+            return conferenceDTOSet;
         }
     }
 

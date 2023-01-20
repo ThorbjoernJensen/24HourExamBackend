@@ -62,6 +62,16 @@ public class APIResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("talk")
+//    @RolesAllowed({"user"})
+    public String getAllTalks() {
+        Set<TalkDTO> talkDTOSet = FACADE.getAllTalks();
+        return GSON.toJson(talkDTOSet);
+
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("speaker")
 //    @RolesAllowed({"user"})
     public String getAllSpeakers() {

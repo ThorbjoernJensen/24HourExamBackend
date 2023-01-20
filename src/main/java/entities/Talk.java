@@ -20,7 +20,7 @@ public class Talk {
 
     private Integer duration;
 
-//    TODO implement as 1 to many
+    //    TODO implement as 1 to many
     private String propsList;
 
     @ManyToOne
@@ -53,6 +53,16 @@ public class Talk {
         this.duration = talkDTO.getDuration();
         this.propsList = talkDTO.getPropsList();
 
+        if(talkDTO.getConference() != null){
+        this.conference = new Conference(
+                talkDTO.getConference().getId(),
+                talkDTO.getConference().getName(),
+                talkDTO.getConference().getLocation(),
+                talkDTO.getConference().getCapacity(),
+                talkDTO.getConference().getDate(),
+                talkDTO.getConference().getTime()
+        );
+        }
     }
 
     public Integer getId() {
@@ -104,6 +114,6 @@ public class Talk {
     }
 
     public void addSpeaker(Speaker speaker) {
-       speakers.add(speaker);
+        speakers.add(speaker);
     }
 }

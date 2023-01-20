@@ -36,6 +36,16 @@ public class APIFacade {
         return emf.createEntityManager();
     }
 
+    public long getConfereceCount() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            long conferenceCount = (long) em.createQuery("SELECT COUNT(c) FROM Conference c").getSingleResult();
+            return conferenceCount;
+        } finally {
+            em.close();
+        }
+    }
+
     public Set<ConferenceDTO> getAllConferences() {
         EntityManager em = getEntityManager();
         Set<ConferenceDTO> conferenceDTOSet = new HashSet<>();
@@ -51,15 +61,6 @@ public class APIFacade {
         }
     }
 
-    public long getConfereceCount() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            long conferenceCount = (long) em.createQuery("SELECT COUNT(c) FROM Conference c").getSingleResult();
-            return conferenceCount;
-        } finally {
-            em.close();
-        }
-    }
 
     public Set<SpeakerDTO> getAllSpeakers() {
         EntityManager em = getEntityManager();
@@ -121,12 +122,19 @@ public class APIFacade {
 
     public TalkDTO createTalk(TalkDTO newTalkDTO) {
         Talk newTalk = new Talk(newTalkDTO);
+        Conference conference;
+
         EntityManager em = emf.createEntityManager();
+        if (newTalk.getConference() != null) {
+            conference = em.find(Conference.class, newTalk.getConference().getId());
+            conference.addTalk(newTalk);
+        }
+
         if (newTalk.getTopic().length() == 0) {
             throw new WebApplicationException("Topic is missing", 400);
         }
-
 //        TODO check for duplicates
+
 
         try {
             em.getTransaction().begin();
@@ -162,7 +170,6 @@ public class APIFacade {
             em.close();
         }
     }
-
 
 
     //    public Set<OwnerDTO> getAllOwners() {

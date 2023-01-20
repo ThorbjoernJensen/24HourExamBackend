@@ -30,8 +30,17 @@ public class Conference {
     }
 
 
+    public Conference(Integer id, String name, String location, Integer capacity, String date, String time) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+        this.capacity = capacity;
+        this.date = date;
+        this.time = time;
+    }
 
     public Conference(String name, String location, Integer capacity, String date, String time) {
+
         this.name = name;
         this.location = location;
         this.capacity = capacity;
@@ -39,6 +48,9 @@ public class Conference {
         this.time = time;
     }
     public Conference(ConferenceDTO conferenceDTO) {
+        if(conferenceDTO.getId()!=null){
+            this.id = conferenceDTO.getId();
+        }
         this.name = conferenceDTO.getName();
         this.location = conferenceDTO.getLocation();
         this.capacity = conferenceDTO.getCapacity();
