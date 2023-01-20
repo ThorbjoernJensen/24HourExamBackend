@@ -56,10 +56,8 @@ public class APIResourceTest {
 
     @BeforeAll
     public static void setUpClass() {
-        //This method must be called before you request the EntityManagerFactory
         EMF_Creator.startREST_TestWithDB();
         emf = EMF_Creator.createEntityManagerFactoryForTest();
-
         httpServer = startServer();
         //Setup RestAssured
         RestAssured.baseURI = SERVER_URL;
@@ -69,9 +67,7 @@ public class APIResourceTest {
 
     @AfterAll
     public static void closeTestServer() {
-        //Don't forget this, if you called its counterpart in @BeforeAll
         EMF_Creator.endREST_TestWithDB();
-
         httpServer.shutdownNow();
     }
 
@@ -117,7 +113,7 @@ public class APIResourceTest {
             c3.addTalk(t2);
             c3.addTalk(t3);
 
-// add talks to speakers
+//                  add talks to speakers
             s2.addTalk(t1);
             s2.addTalk(t2);
             s3.addTalk(t1);
@@ -163,7 +159,6 @@ public class APIResourceTest {
 
     @Test
     public void testAPIResourceIsResponding() {
-
         given().when().get("/info").then().statusCode(200);
     }
 
@@ -176,7 +171,6 @@ public class APIResourceTest {
                 .then()
                 .statusCode(200);
     }
-
 
     @Test
     void welcomeGreeting() {
@@ -199,8 +193,6 @@ public class APIResourceTest {
                         .then().statusCode(200)
                         .assertThat()
                         .extract().body().jsonPath().getList("", ConferenceDTO.class);
-
-//        conferenceDTOList.forEach(ownerDTO -> System.out.println(ownerDTO.getId() + ": " + ownerDTO.getName()));
         assertThat(conferenceDTOList, containsInAnyOrder(c1DTO, c2DTO, c3DTO));
     }
 
@@ -219,11 +211,10 @@ public class APIResourceTest {
         assertThat(speakerDTOList, containsInAnyOrder(s1DTO, s2DTO, s3DTO));
     }
 
-        @Test
+    @Test
     void createSpeaker() {
-            Speaker newSpeaker = new Speaker( "Preben", "Cykelhandler", "m");
-
-            SpeakerDTO newSpeakerDTO = new SpeakerDTO(newSpeaker);
+        Speaker newSpeaker = new Speaker("Preben", "Cykelhandler", "m");
+        SpeakerDTO newSpeakerDTO = new SpeakerDTO(newSpeaker);
         String requestBody = GSON.toJson(newSpeakerDTO);
 
         given()
@@ -238,8 +229,8 @@ public class APIResourceTest {
                 .body("id", notNullValue())
                 .body("name", equalTo("Preben"))
                 .body("profession", equalTo("Cykelhandler"));
-
     }
+
     @Test
     void createTalk() {
         Talk newTalk = new Talk("Climbing", 30, "suits");
@@ -260,10 +251,10 @@ public class APIResourceTest {
                 .body("topic", equalTo("Climbing"))
                 .body("duration", equalTo(30));
     }
+
     @Test
     void createConference() {
         Conference newConference = new Conference("Back to nature", "Østermarie", 30, "31-2-23", "02:00:00");
-
         ConferenceDTO newConferenceDTO = new ConferenceDTO(newConference);
         String requestBody = GSON.toJson(newConferenceDTO);
 
@@ -281,78 +272,5 @@ public class APIResourceTest {
                 .body("location", equalTo("Østermarie"))
                 .body("capacity", equalTo(30));
     }
-
-
-
-
-//
-//    @Test
-//    void getAllHarbours() {
-//        List<HarbourDTO> harbourDTOList;
-////       Set<HarbourDTOS> harbourDTOSet;
-////       String jsonString =
-//
-//        harbourDTOList =
-//                given()
-//                        .contentType("application/json")
-//                        .when()
-//                        .get("/boat/harbour")
-//                        .then()
-//                        .assertThat()
-//                        .statusCode(HttpStatus.OK_200.getStatusCode())
-//                        .extract().body().jsonPath().getList("", HarbourDTO.class);
-//
-////                        .extract().body().asString();
-////        System.out.println(jsonString);
-//
-//        assertThat(harbourDTOList, containsInAnyOrder(h1DTO, h2DTO, h3DTO));
-//
-//
-////        Gson gson = new Gson();
-//        //        JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
-////        Type collectionType = new TypeToken<Collection<Integer>>(){}.getType();
-////        Collection<Integer> ints2 = gson.fromJson(json, collectionType);
-//    }
-//
-//    @Test
-//    void getAllBoats() {
-//        List<BoatDTO> boatDTOList;
-//        boatDTOList = given()
-//                .contentType("application/json")
-//                .when()
-//                .get("/boat/boat")
-//                .then()
-//                .assertThat()
-//                .statusCode(HttpStatus.OK_200.getStatusCode())
-//                .extract().body().jsonPath().getList("", BoatDTO.class);
-//        assertThat(boatDTOList, containsInAnyOrder(b1DTO, b2DTO, b3DTO));
-//
-////        String jsonString = given()
-////                .contentType("application/json")
-////                .when()
-////                .get("/boat/boat")
-////                .then()
-////                .assertThat()
-////                .statusCode(HttpStatus.OK_200.getStatusCode())
-////                .extract().body().asString();
-////        System.out.println(jsonString);
-//    }
-//
-//
-
-//    @Test //fra Jons ca2
-//    public void getAllPersons(){
-//        List<PersonDTO> personsDTOs;
-//
-//        Response response = given()
-//                .when().get("/person/all")
-//                .then()
-//                .contentType("application/json")
-//                .body("all.firstName", hasItems("Jon","Jamie","Daenerys") )
-//                .extract().response();
-//        System.out.println(response.asString());
-//
-//    }
-
 
 }

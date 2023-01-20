@@ -97,7 +97,7 @@ public class APIFacadeTest {
         c3.addTalk(t2);
         c3.addTalk(t3);
 
-// add talks to speakers
+//              add talks to speakers
         s2.addTalk(t1);
         s2.addTalk(t2);
         s3.addTalk(t1);
@@ -123,9 +123,7 @@ public class APIFacadeTest {
         s2DTO = new SpeakerDTO(s2);
         s3DTO = new SpeakerDTO(s3);
         t1DTO = new TalkDTO(t1);
-
         t2DTO = new TalkDTO(t2);
-
         t3DTO = new TalkDTO(t3);
     }
 
@@ -147,7 +145,6 @@ public class APIFacadeTest {
         int actual = owners.size();
         assertEquals(actual, expexted);
         assertThat(owners, containsInAnyOrder(c1DTO, c2DTO, c3DTO));
-
     }
 
     @Test
@@ -163,10 +160,8 @@ public class APIFacadeTest {
     @Test
     void createSpeaker() {
         Speaker newSpeaker = new Speaker("Preben", "Cykelhandler", "m");
-
         SpeakerDTO newSpeakerDTO = new SpeakerDTO(newSpeaker);
         SpeakerDTO createdDTO = facade.createSpeaker(newSpeakerDTO);
-
         assertEquals(4, facade.getAllSpeakers().size());
         Set<SpeakerDTO> speakers = facade.getAllSpeakers();
         assertThat(speakers, containsInAnyOrder(s1DTO, s2DTO, s3DTO, createdDTO));
@@ -175,10 +170,8 @@ public class APIFacadeTest {
     @Test
     void createTalk() {
         Talk newTalk = new Talk("Climbing", 30, "suits");
-
         TalkDTO newTalkDTO = new TalkDTO(newTalk);
         TalkDTO createdDTO = facade.createTalk(newTalkDTO);
-
         assertEquals(4, facade.getAllTalks().size());
         Set<TalkDTO> talks = facade.getAllTalks();
         assertThat(talks, containsInAnyOrder(t1DTO, t2DTO, t3DTO, createdDTO));
@@ -196,37 +189,4 @@ public class APIFacadeTest {
     }
 
 }
-
-//
-//
-//    @Test
-//    void getOwnerById() {
-//        OwnerDTO expected = o1DTO;
-//        Long id = o1DTO.getId();
-//        OwnerDTO actual = facade.getOwnerById(id);
-//        assertEquals(expected, actual);
-//
-//    }
-//
-//
-//    @Test
-//    void getAllHarbours() {
-//        Set<HarbourDTO> harbours = facade.getAllHarbours();
-//        int expectedLength = 3;
-//        int actualLength = harbours.size();
-//        assertEquals(actualLength, expectedLength);
-//        assertThat(harbours, containsInAnyOrder(h1DTO, h2DTO, h3DTO));
-//
-//    }
-//
-//    @Test
-//    void getAllBoats() {
-//        Set<BoatDTO> boats = facade.getAllBoats();
-//        int expectedLength = 3;
-//        int actualLength = boats.size();
-//        assertEquals(actualLength, expectedLength);
-//        assertThat(boats, containsInAnyOrder(b1DTO, b2DTO, b3DTO));
-//
-//    }
-//
 

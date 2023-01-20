@@ -92,37 +92,26 @@ public class APIFacade {
     }
 
     public SpeakerDTO createSpeaker(SpeakerDTO newSpeakerDTO) {
-
-//        System.out.println("fra facade create boat: " + newBoatDTO.getOwners());
         Speaker newSpeaker = new Speaker(newSpeakerDTO);
-
         EntityManager em = emf.createEntityManager();
         if ((newSpeaker.getName().length() == 0) || (newSpeaker.getProfession().length() == 0)) {
             throw new WebApplicationException("Name and/or profession is missing", 400);
         }
-
-
 //        TODO check for duplicates
 
         try {
             em.getTransaction().begin();
-//            harbour = em.find(Harbour.class, newBoat.getHarbour().getId());
-//            harbour.addBoat(newBoat);
-
             em.persist(newSpeaker);
             em.getTransaction().commit();
             return new SpeakerDTO(newSpeaker);
         } finally {
             em.close();
         }
-
-
     }
 
     public TalkDTO createTalk(TalkDTO newTalkDTO) {
         Talk newTalk = new Talk(newTalkDTO);
         Conference conference;
-
         EntityManager em = emf.createEntityManager();
         if (newTalk.getConference() != null) {
             conference = em.find(Conference.class, newTalk.getConference().getId());
@@ -134,12 +123,8 @@ public class APIFacade {
         }
 //        TODO check for duplicates
 
-
         try {
             em.getTransaction().begin();
-//            harbour = em.find(Harbour.class, newBoat.getHarbour().getId());
-//            harbour.addBoat(newBoat);
-
             em.persist(newTalk);
             em.getTransaction().commit();
             return new TalkDTO(newTalk);
@@ -154,14 +139,10 @@ public class APIFacade {
         if (newConference.getName().length() == 0) {
             throw new WebApplicationException("Name is missing", 400);
         }
-
 //        TODO check for duplicates
 
         try {
             em.getTransaction().begin();
-//            harbour = em.find(Harbour.class, newBoat.getHarbour().getId());
-//            harbour.addBoat(newBoat);
-
             em.persist(newConference);
             em.getTransaction().commit();
             return new ConferenceDTO(newConference);
@@ -189,12 +170,9 @@ public class APIFacade {
 //            newConference = em.find(Conference.class, updateCandidateDTO.getConference().getId());
 //            oldTalk.setConference(newConference);
 
-//            Tilsvarende kan der fra frontend kun vælges owners der er i db, og update består i at erstatte bådens set af owners
-//          der oprettes en managed set af owners
-
-//            newSpeakerDTOs.forEach(speakerDTO -> newSpeakers.add(em.find(Speaker.class, speakerDTO.getId())));
+//            Tilsvarende kan der fra frontend kun vælges speakers der er i db, og update kan bestå i at erstatte talks set af speakers
 //
-////            em.detach(oldSpeaker);
+//            newSpeakerDTOs.forEach(speakerDTO -> newSpeakers.add(em.find(Speaker.class, speakerDTO.getId())));
 //            oldTalk.getSpeakers().clear();
 //            for (Speaker s : newSpeakers) {
 //                oldTalk.addSpeaker(s);
@@ -241,71 +219,6 @@ public class APIFacade {
     }
 }
 
-
-//
-//    public BoatDTO createBoat(BoatDTO newBoatDTO) {
-//        System.out.println("fra facade create boat: " + newBoatDTO.getOwners());
-//        Boat newBoat = new Boat(newBoatDTO);
-//        Harbour harbour;
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            em.getTransaction().begin();
-//            harbour = em.find(Harbour.class, newBoat.getHarbour().getId());
-//            harbour.addBoat(newBoat);
-//
-//            em.persist(newBoat);
-//            em.getTransaction().commit();
-//            return new BoatDTO(newBoat);
-//        } finally {
-//            em.close();
-//            System.out.println("vi nåede til em close i create boat");
-//        }
-//
-////        em.getTransaction().begin();
-////        updateAddress(newPerson, em);
-////        newPerson.getPhone().forEach(em::persist);
-////        em.persist(newPerson);
-////        em.getTransaction().commit();
-////        return newPerson;
-//
-//    }
-//
-//    public BoatDTO editBoat(BoatDTO newBoatDTO) {
-//        EntityManager em = getEntityManager();
-//        Boat oldBoat;
-//        Harbour newHarbour;
-//        Set<OwnerDTO> newOwnerDTOs = newBoatDTO.getOwners();
-//        Set<Owner> newOwners = new HashSet<>();
-//
-//        try {
-//            em.getTransaction().begin();
-//            oldBoat = em.find(Boat.class, newBoatDTO.getId());
-//
-//            oldBoat.setBrand(newBoatDTO.getBrand());
-//            oldBoat.setName(newBoatDTO.getName());
-//            oldBoat.setImage(newBoatDTO.getImage());
-//            oldBoat.setModel(newBoatDTO.getModel());
-//
-////         Frontend er implementeret så man i princippet (via dropdowns) kun kan vælge havne som findes i backend.
-//            newHarbour = em.find(Harbour.class, newBoatDTO.getHarbour().getId());
-//            oldBoat.setHarbour(newHarbour);
-//
-////            Tilsvarende kan der fra frontend kun vælges owners der er i db, og update består i at erstatte bådens set af owners
-////          der oprettes en managed set af owners
-//            newOwnerDTOs.forEach(ownerDTO -> newOwners.add(em.find(Owner.class, ownerDTO.getId())));
-//
-////            em.detach(oldBoat);
-//            oldBoat.getOwners().clear();
-//            for (Owner o : newOwners) {
-//                oldBoat.addOwner(o);
-//            }
-//            em.merge(oldBoat);
-//            em.getTransaction().commit();
-//        } finally {
-//            em.close();
-//        }
-//        return new BoatDTO(oldBoat);
-//    }
 
 
 

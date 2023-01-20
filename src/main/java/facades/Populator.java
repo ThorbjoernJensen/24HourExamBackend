@@ -23,9 +23,9 @@ public class Populator {
     public static void populate() {
 
         EntityManager em = emf.createEntityManager();
-        User user = new User("user", "As123456");
-        User admin = new User("admin", "JK123456");
-        User both = new User("user_admin", "DQ123456");
+        User user = new User("user", "AB3456");
+        User admin = new User("admin", "AB3456");
+        User both = new User("user_admin", "AB3456");
 
         em.getTransaction().begin();
         Role userRole = new Role("user");
@@ -55,7 +55,7 @@ public class Populator {
         c3.addTalk(t2);
         c3.addTalk(t3);
 
-// add talks to speakers
+//              add talks to speakers
         s2.addTalk(t1);
         s2.addTalk(t2);
         s3.addTalk(t1);

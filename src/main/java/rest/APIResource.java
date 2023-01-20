@@ -128,59 +128,6 @@ public class APIResource {
         TalkDTO deletedTalk = FACADE.deleteTalk(deleteDTO);
         return GSON.toJson(deletedTalk);
     }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("harbour")
-////    @RolesAllowed({"user"})
-//    public String getAllHarbours() {
-//        Set<HarbourDTO> harbourDTOSet = FACADE.getAllHarbours();
-//        System.out.println("vi var i harbour endpoint");
-////        List<HarbourDTO> harbourDTOList = new ArrayList<>();
-////        harbourDTOList.addAll(harbourDTOSet);
-////        return GSON.toJson(harbourDTOList);
-//        return GSON.toJson(harbourDTOSet);
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("boat")
-////    @RolesAllowed({"user"})
-//    public String getAllBoats() {
-//        Set<BoatDTO> boatDTOSet = FACADE.getAllBoats();
-//        List<BoatDTO> boatDTOList = new ArrayList<>();
-//        boatDTOList.addAll(boatDTOSet);
-//        return GSON.toJson(boatDTOList);
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("harbour2")
-////    @RolesAllowed({"user"})
-//    public String getAllHarbours2() {
-//        Set<HarbourDTO> harbourDTOSet = FACADE.getAllHarbours2();
-//
-////        harbourDTOList.addAll(HarbourDTOSet);
-//        return GSON.toJson(harbourDTOSet);
-//    }
-//
-//    @POST
-//    @Consumes("application/json")
-//    @Produces("application/json")
-//    @Path("boat")
-//    public String createBoat(String boatJSON) {
-//        System.out.println("her har vi boatJSON:" + boatJSON);
-//        BoatDTO newBoatDTO = GSON.fromJson(boatJSON, BoatDTO.class);
-//        System.out.printf("her er vi kommet til efter GSON");
-////        Boat newBoat = new Boat(newBoatDTO);
-//        BoatDTO createdBoatDTO = FACADE.createBoat(newBoatDTO);
-//        return GSON.toJson(createdBoatDTO);
-//
-//    }
-//
-
-//
-
 
 }
 
