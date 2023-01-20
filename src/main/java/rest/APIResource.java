@@ -84,6 +84,7 @@ public class APIResource {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("speaker")
+    //    @RolesAllowed({"admin"})
     public String createSpeaker(String speakerJSON) {
         SpeakerDTO newSpeakerDTO = GSON.fromJson(speakerJSON, SpeakerDTO.class);
         SpeakerDTO createdSpeakerDTO = FACADE.createSpeaker(newSpeakerDTO);
@@ -94,6 +95,7 @@ public class APIResource {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("talk")
+    //    @RolesAllowed({"admin"})
     public String createTalk(String talkJSON) {
         TalkDTO newTalkDTO = GSON.fromJson(talkJSON, TalkDTO.class);
         TalkDTO createdTalkDTO = FACADE.createTalk(newTalkDTO);
@@ -104,6 +106,7 @@ public class APIResource {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("conference")
+    //    @RolesAllowed({"admin"})
     public String createConference(String conferenceJSON) {
         ConferenceDTO newConferenceDTO = GSON.fromJson(conferenceJSON, ConferenceDTO.class);
         ConferenceDTO createdConferenceDTO = FACADE.createConference(newConferenceDTO);
@@ -114,6 +117,7 @@ public class APIResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("talk")
+    //    @RolesAllowed({"admin"})
     public String editBoat(String talkJSON) {
         TalkDTO updateCandidateDTO = GSON.fromJson(talkJSON, TalkDTO.class);
 //        TODO validate input
@@ -123,6 +127,7 @@ public class APIResource {
 
     @DELETE
     @Path("talk")
+    //    @RolesAllowed({"admin"})
     public String deleteBoat(String talkJSON){
         TalkDTO deleteDTO = GSON.fromJson(talkJSON, TalkDTO.class);
         TalkDTO deletedTalk = FACADE.deleteTalk(deleteDTO);
