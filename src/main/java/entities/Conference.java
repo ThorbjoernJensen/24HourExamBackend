@@ -115,4 +115,9 @@ public class Conference {
         this.talks.add(talk);
         talk.setConference(this);
     }
+
+    public void removeTalk(Talk talk) {
+        talk.setConference(null);
+        this.talks.remove(talk);
+    }
 }

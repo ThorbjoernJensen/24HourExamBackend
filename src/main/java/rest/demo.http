@@ -33,3 +33,27 @@ accept: application/json
   "date": "2-2-23",
   "time": "00:10:00"
 }
+
+### Edit talk localhost
+PUT http://localhost:8080/conference/api/info/talk
+Content-Type: application/json
+accept: application/json
+
+{
+  "id": 5,
+  "topic": "How to survive in the wilderness",
+  "duration": 90,
+  "propsList": "Music, pointers"
+}
+
+### Delete talk localhost
+DELETE http://localhost:8080/conference/api/info/talk
+Content-Type: application/json
+accept: application/json
+
+{
+  "id": 5,
+  "topic": "How to survive in the wilderness",
+  "duration": 90,
+  "propsList": "Music, pointers"
+}

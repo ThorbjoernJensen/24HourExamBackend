@@ -89,6 +89,7 @@ public class APIResource {
         SpeakerDTO createdSpeakerDTO = FACADE.createSpeaker(newSpeakerDTO);
         return GSON.toJson(createdSpeakerDTO);
     }
+
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -107,6 +108,25 @@ public class APIResource {
         ConferenceDTO newConferenceDTO = GSON.fromJson(conferenceJSON, ConferenceDTO.class);
         ConferenceDTO createdConferenceDTO = FACADE.createConference(newConferenceDTO);
         return GSON.toJson(createdConferenceDTO);
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("talk")
+    public String editBoat(String talkJSON) {
+        TalkDTO updateCandidateDTO = GSON.fromJson(talkJSON, TalkDTO.class);
+//        TODO validate input
+        TalkDTO editedTalkDTO = FACADE.editTalk(updateCandidateDTO);
+        return GSON.toJson(editedTalkDTO);
+    }
+
+    @DELETE
+    @Path("talk")
+    public String deleteBoat(String talkJSON){
+        TalkDTO deleteDTO = GSON.fromJson(talkJSON, TalkDTO.class);
+        TalkDTO deletedTalk = FACADE.deleteTalk(deleteDTO);
+        return GSON.toJson(deletedTalk);
     }
 //
 //    @GET
@@ -158,16 +178,7 @@ public class APIResource {
 //
 //    }
 //
-//    @PUT
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Path("boat/{id}")
-//    public String editBoat(@PathParam("id") String id, String boatJSON) {
-//        BoatDTO newBoatDTO = GSON.fromJson(boatJSON, BoatDTO.class);
-////        TODO validate input
-//        BoatDTO editedBoatDTO = FACADE.editBoat(newBoatDTO);
-//        return GSON.toJson(editedBoatDTO);
-//    }
+
 //
 
 

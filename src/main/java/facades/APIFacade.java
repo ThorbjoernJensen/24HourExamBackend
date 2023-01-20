@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.WebApplicationException;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -171,109 +170,78 @@ public class APIFacade {
         }
     }
 
+    public TalkDTO editTalk(TalkDTO updateCandidateDTO) {
+        EntityManager em = getEntityManager();
+        Talk oldTalk;
+        Conference newConference;
+//        Set<SpeakerDTO> newSpeakerDTOs = updateCandidateDTO.getSpeakers();
+        Set<Speaker> newSpeakers = new HashSet<>();
 
-    //    public Set<OwnerDTO> getAllOwners() {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            TypedQuery<Owner> query = em.createQuery("SELECT o FROM Owner o", Owner.class);
-//            List<Owner> owners = query.getResultList();
-//            Set<OwnerDTO> ownerDTOList = OwnerDTO.makeDTOSet(owners);
-////        return RenameMeDTO.getDtos(rms);
-//            return ownerDTOList;
-//        } finally {
-//            em.close();
-//        }
-//    }
+        try {
+            em.getTransaction().begin();
+            oldTalk = em.find(Talk.class, updateCandidateDTO.getId());
+
+            oldTalk.setTopic(updateCandidateDTO.getTopic());
+            oldTalk.setDuration(updateCandidateDTO.getDuration());
+            oldTalk.setPropsList(updateCandidateDTO.getPropsList());
+
+//         Frontend er implementeret så man i princippet (via dropdowns) kun kan vælge Conferencer som findes i db.
+//            newConference = em.find(Conference.class, updateCandidateDTO.getConference().getId());
+//            oldTalk.setConference(newConference);
+
+//            Tilsvarende kan der fra frontend kun vælges owners der er i db, og update består i at erstatte bådens set af owners
+//          der oprettes en managed set af owners
+
+//            newSpeakerDTOs.forEach(speakerDTO -> newSpeakers.add(em.find(Speaker.class, speakerDTO.getId())));
+//
+////            em.detach(oldSpeaker);
+//            oldTalk.getSpeakers().clear();
+//            for (Speaker s : newSpeakers) {
+//                oldTalk.addSpeaker(s);
+//            }
+            em.merge(oldTalk);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return new TalkDTO(oldTalk);
 
 
-//    @Override
-//    public PersonsDTO getAllPersons() {
-//        EntityManager em = getEntityManager();
-//        try{
-//            return new PersonsDTO(em.createNamedQuery("Person.getAllRows").getResultList());
-//        }finally{
-//            em.close();
-//        }
-//    }
-//
+    }
+
+    public TalkDTO deleteTalk(TalkDTO deleteDTO) {
+        EntityManager em = getEntityManager();
+        int id = deleteDTO.getId();
+        Talk talk = em.find(Talk.class, id);
+        System.out.println(talk.toString());
+
+        if (talk == null) {
+            throw new WebApplicationException(String.format("Talk with id: (%d) is not in db", id), 404);
+        }
+
+        if (talk.getSpeakers().size() > 0) {
+            talk.getSpeakers().forEach(speaker -> {
+                speaker.getTalks().remove(talk);
+                em.merge(speaker);
+            });
+        }
+
+        if (talk.getConference() != null) {
+            talk.getConference().removeTalk(talk);
+        }
+        try {
+            em.getTransaction().begin();
+            em.remove(talk);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+
+        return new TalkDTO(talk);
+    }
+}
 
 
-//    public OwnerDTO getOwnerById(long id) { //throws RenameMeNotFoundException {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            Owner owner = em.find(Owner.class, id);
-////        if (rm == null)
-////            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
-////        return new RenameMeDTO(rm);
-//            return new OwnerDTO(owner);
-//        } finally {
-//            em.close();
-//        }
-//    }
-//
-
-//
-
-//
-//    public Set<HarbourDTO> getAllHarbours() {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            em.getTransaction().begin();
-//            TypedQuery<Harbour> query = em.createQuery("SELECT h FROM Harbour h", Harbour.class);
-//            List<Harbour> harbours = query.getResultList();
-//            harbours.forEach(harbour -> harbour.getBoats().forEach(boat -> System.out.println("boat:" + boat.getId())));
-////        List<HarbourDTO> harbourDTOList = HarbourDTO.makeDTOSet(harbours);
-//            Set<HarbourDTO> harbourDTOList = HarbourDTO.makeDTOSet(harbours);
-//            System.out.println("fra facade: ");
-//            harbourDTOList.forEach(harbourDTO -> System.out.println(harbourDTO.toString()));
-//            em.getTransaction().commit();
-//            return harbourDTOList;
-//        } finally {
-//            em.close();
-//        }
-//    }
-//
-//    public Set<HarbourDTO> getAllHarbours2() {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            TypedQuery<Harbour> query = em.createQuery("Select h From Harbour h LEFT JOIN FETCH h.boats", Harbour.class);
-////            ist<Author> authors = em.createQuery("SELECT a FROM Author a LEFT JOIN FETCH a.books", Author.class).getResultList();
-//            List<Harbour> harbourList = query.getResultList();
-//            harbourList.forEach(harbour -> harbour.getBoats().forEach(boat -> System.out.println("boat:" + boat.getId())));
-//            return HarbourDTO.makeDTOSet(harbourList);
-//        } finally {
-//            em.close();
-//        }
-//    }
-//
-//
-//    public Set<BoatDTO> getAllBoats() {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//
-//            TypedQuery<Boat> query = em.createQuery("SELECT b FROM Boat b", Boat.class);
-//            List<Boat> boatList = query.getResultList();
-//            Set<BoatDTO> boatDTOSet = BoatDTO.makeDTOSet(boatList);
-//            return boatDTOSet;
-//        } finally {
-//            em.close();
-//        }
-//    }
-//
-//    public Owner create(Owner owner) {
-//        Owner newOwner = owner;
-//
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            em.getTransaction().begin();
-//            em.persist(newOwner);
-//            em.getTransaction().commit();
-//            return owner;
-//        } finally {
-//            em.close();
-//        }
-////        return new RenameMeDTO(rme);
-//    }
 //
 //    public BoatDTO createBoat(BoatDTO newBoatDTO) {
 //        System.out.println("fra facade create boat: " + newBoatDTO.getOwners());
@@ -338,7 +306,6 @@ public class APIFacade {
 //        }
 //        return new BoatDTO(oldBoat);
 //    }
-}
 
 
 

@@ -15,6 +15,7 @@ public class TalkDTO {
     private Integer duration;
     private String propsList;
     private ConferenceDTO conference;
+    private Set<SpeakerDTO> speakers;
 
     public TalkDTO(Talk talk) {
         if (talk.getId() != null) {
@@ -26,6 +27,9 @@ public class TalkDTO {
         if (talk.getConference() != null) {
             this.conference = new ConferenceDTO(talk.getConference());
         }
+//        if (!talk.getSpeakers().size()==0) {
+//            this.speakers = new ConferenceDTO(talk.getConference());
+//        }
     }
 
     public Integer getId() {
@@ -48,6 +52,10 @@ public class TalkDTO {
         return conference;
     }
 
+    public Set<SpeakerDTO> getSpeakers() {
+        return speakers;
+    }
+
     public static Set<TalkDTO> makeDTOSet(Set<Talk> talks) {
         Set<TalkDTO> talkDTOSet = new HashSet<>();
         talks.forEach(talk -> talkDTOSet.add(new TalkDTO(talk)));
@@ -59,6 +67,8 @@ public class TalkDTO {
         talks.forEach(talk -> talkDTOSet.add(new TalkDTO(talk)));
         return talkDTOSet;
     }
+
+
 
     public static class SpeakerDTO {
         private Integer id;
